@@ -14,7 +14,7 @@ services:
     volumes:
       - ./mariadb:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: qwerty
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     container_name: db
 
   phpmyadmin:
@@ -24,6 +24,6 @@ services:
     ports:
       - 8765:80
     environment:
-      MYSQL_ROOT_PASSWORD: qwerty
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       - mariadb
