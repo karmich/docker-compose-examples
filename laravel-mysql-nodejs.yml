@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7.31
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    container_name: db
+    ports:
+      - 3307:3306
+    networks:
+      - net
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: db
+      MYSQL_PASSWORD: db
+
+  app:
+    image: chialab/php:7.3-apache
+    volumes:
+      - ./:/var/www/html
+      - ./docker/apache2/000-default.conf:/etc/apache2/sites-available/000-default.conf
+    container_name: app
+    networks:
+      - net
+    ports:
+      - 6789:80
+
+  nodejs:
+    image: node
+    volumes:
+      - ./:/home/node
+    container_name: nodejs
+    networks:
+      - net
+    working_dir: /home/node
+
+networks:
+  net:
