@@ -1,0 +1,49 @@
+version: '3' 
+
+services:
+  app:
+    image: chialab/php:7.2-apache
+    volumes:
+      - ./:/var/www/html
+      - ./docker/apache2/sarafanex.conf:/etc/apache2/sites-enabled/000-default.conf
+    working_dir: /var/www/html
+    ports:
+      - 8080:80
+    links:
+      - db
+    depends_on:
+      - db
+    networks:
+      - net
+    
+  db:
+    image: mysql:5.7.31
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: db
+      MYSQL_PASSWORD: db
+      MYSQL_DATABASE: sarafanex
+    container_name: db
+    networks:
+      - net
+
+  node:
+    image: node
+    volumes:
+      - ./:/node
+    working_dir: /node
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+    networks:
+      - net
+    ports:
+      - 6789:80
+
+networks:
+  net:
+    driver: bridge
